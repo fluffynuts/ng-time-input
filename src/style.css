@@ -1,0 +1,6 @@
+input.hour, input.minute {
+  width: 40px;
+}
+.time-input {
+  display: inline-block;
+}
