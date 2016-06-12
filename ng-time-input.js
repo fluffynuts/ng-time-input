@@ -101,8 +101,6 @@ function timeInputDirective() {
       $scope.$watch(modelBind, function(newValue, oldValue) {
         setInputsFor(newValue);
       });
-      const hoursInput = getInput($element, 'hours');
-      const minutesInput = getInput($element, 'minutes');
       function setHours(val) {
         set(get().setHours(parseInt(val)));
         setInputsFor($scope[modelBind]);
@@ -111,19 +109,20 @@ function timeInputDirective() {
         set(get().setMinutes(parseInt(val)));
         setInputsFor($scope[modelBind]);
       }
+      var suppressSelect = false;
       $scope.$watch('hours', function(newValue, oldValue) {
-        handleSet(0, 23, newValue, oldValue, setHours, minutesInput);
+        handleSet(0, 23, newValue, oldValue, setHours, suppressSelect ? null : getInput($element, 'minutes'));
+        suppressSelect = false;
       })
       $scope.$watch('minutes', function(newValue, oldValue) {
         handleSet(0, 59, newValue, oldValue, setMinutes);
       });
-      function blurAll() {
-        hoursInput.blur();
-        minutesInput.blur();
+      function suppress() {
+        suppressSelect = true;
       }
 
-      $scope.incrementHours = makeStepperFunction(get, set, steppers.incrementHours, blurAll);
-      $scope.decrementHours = makeStepperFunction(get, set, steppers.decrementHours);
+      $scope.incrementHours = makeStepperFunction(get, set, steppers.incrementHours, suppress); 
+      $scope.decrementHours = makeStepperFunction(get, set, steppers.decrementHours, suppress);
       $scope.incrementMinutes = makeStepperFunction(get, set, steppers.incrementMinutes);
       $scope.decrementMinutes = makeStepperFunction(get, set, steppers.decrementMinutes);
     }
@@ -133,6 +132,7 @@ function timeInputDirective() {
 module.exports = function(mod) {
   mod.directive('timeInput', timeInputDirective);
 }
+
 },{"./template.html":3}],2:[function(require,module,exports){
 const register = require('./directive');
 const mod = angular.module('ngTimeInput', ['ng-scroll']);
