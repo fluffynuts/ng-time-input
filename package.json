@@ -8,7 +8,8 @@
     "url": "https://github.com/fluffynuts/ng-time-input.git"
   },
   "scripts": {
-    "build": "browserify -t [ stringify --extensions [ .html ] ] src/register.js -o index.js"
+    "build": "browserify -t [ stringify --extensions [ .html ] ] src/register.js -o ng-time-input.js",
+    "postbuild": "cp-cli src/style.css ng-time-input.css"
   },
   "author": "",
   "license": "BSD-2-Clause",
@@ -18,16 +19,21 @@
   "homepage": "https://github.com/fluffynuts/ng-time-input#readme",
   "dependencies": {
     "angular": "^1.5.6",
-    "ng-scroll": "^1.0.1"
+    "ng-scroll": "^1.0.3"
   },
   "devDependencies": {
     "angular-animate": "^1.5.6",
     "angular-aria": "^1.5.6",
     "angular-material": "^1.1.0-rc.5",
+    "browser-sync": "^2.13.0",
     "browserify": "^13.0.1",
     "chai": "^3.5.0",
+    "cp-cli": "^1.0.2",
+    "gulp": "^3.9.1",
+    "gulp-npm-run": "0.0.3",
     "mocha": "^2.5.3",
     "npm-run-all": "^2.1.1",
+    "run-sequence": "^1.2.1",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "stringify": "^5.1.0"

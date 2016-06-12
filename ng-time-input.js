@@ -1,3 +1,4 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 function zeroPad(val) {
   val = '' + val;
   while (val.length < 2) {
@@ -132,3 +133,12 @@ function timeInputDirective() {
 module.exports = function(mod) {
   mod.directive('timeInput', timeInputDirective);
 }
+},{"./template.html":3}],2:[function(require,module,exports){
+const register = require('./directive');
+const mod = angular.module('ngTimeInput', ['ng-scroll']);
+register(mod);
+
+},{"./directive":1}],3:[function(require,module,exports){
+module.exports = "<div class=\"time-input\">\r\n<input \r\n  type=\"text\" \r\n  class=\"hours\" \r\n  data-ng-model=\"hours\"\r\n  onfocus=\"this.select()\"\r\n  data-ng-scroll-up=\"incrementHours()\"\r\n  data-ng-scroll-down=\"decrementHours()\"\r\n  onmouseup=\"return false;\"/>:<input \r\n                                 type=\"text\" \r\n                                 class=\"minutes\" \r\n                                 data-ng-model=\"minutes\"\r\n                                 data-ng-focus=\"minutesFocused()\"\r\n                                 onfocus=\"this.select()\"\r\n                                 data-ng-scroll-up=\"incrementMinutes()\"\r\n                                 data-ng-scroll-down=\"decrementMinutes()\"\r\n                                 onmouseup=\"return false;\"/>\r\n</div>";
+
+},{}]},{},[2]);

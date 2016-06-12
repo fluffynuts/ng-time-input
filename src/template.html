@@ -1,3 +1,18 @@
 <div class="time-input">
-<input type="text" class="hour"/>:<input type="text" class="minute"/>
+<input 
+  type="text" 
+  class="hours" 
+  data-ng-model="hours"
+  onfocus="this.select()"
+  data-ng-scroll-up="incrementHours()"
+  data-ng-scroll-down="decrementHours()"
+  onmouseup="return false;"/>:<input 
+                                 type="text" 
+                                 class="minutes" 
+                                 data-ng-model="minutes"
+                                 data-ng-focus="minutesFocused()"
+                                 onfocus="this.select()"
+                                 data-ng-scroll-up="incrementMinutes()"
+                                 data-ng-scroll-down="decrementMinutes()"
+                                 onmouseup="return false;"/>
 </div>

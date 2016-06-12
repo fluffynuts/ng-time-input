@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" 
+      href="node_modules/angular-material/angular-material.css" />
+    <link rel="stylesheet" type="text/css" 
+      href="ng-time-input.css" />
+    <script type="text/javascript" src="node_modules/angular/angular.js"></script>
+    <script type="text/javascript" src="node_modules/ng-scroll/ng-scroll.js"></script>
+    <script type="text/javascript" src="ng-time-input.js"></script>
+  </head>
+  <body data-ng-app="demo-app">
+    <hr/>
+    <time-input-demo></time-input-demo>
+    <hr/>
+    <script type="text/javascript">
+      angular.module('demo-app', ['ngTimeInput'])
+        .directive('timeInputDemo', function() {
+          return {
+            restrict: 'E',
+            template: '<time-input data-ng-model="value"></time-input><button data-ng-click="toggleTimer()">{{ buttonText }}</button><input data-ng-model="value"></input>',
+            link: function($scope, $element, $attr) {
+              const offText = "Start timer";
+              const onText = "Stop timer";
+              $scope.buttonText = offText;
+              $scope.value = new Date();
+              let timer;
+              $scope.toggleTimer = function() {
+                if (timer) {
+                  window.clearTimeout(timer);
+                  timer = null;
+                  $scope.buttonText = offText;
+                } else {
+                  $scope.buttonText = onText;
+                  timer = window.setInterval(() => {
+                    $scope.$apply(() => {
+                      $scope.value = new Date();
+                    });
+                  }, 1000);
+                }
+              };
+            }
+          }
+        });
+    </script>
+  </body>
+</html>
