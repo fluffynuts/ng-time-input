@@ -1,6 +1,6 @@
 {
   "name": "ng-time-input",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "angular directive for capturing time input from a user",
   "main": "index.js",
   "repository": {
@@ -8,6 +8,7 @@
     "url": "https://github.com/fluffynuts/ng-time-input.git"
   },
   "scripts": {
+    "prepublish": "run-s build",
     "build": "browserify -t [ stringify --extensions [ .html ] ] src/register.js -o ng-time-input.js",
     "postbuild": "cp-cli src/style.css ng-time-input.css"
   },
@@ -32,7 +33,7 @@
     "gulp": "^3.9.1",
     "gulp-npm-run": "0.0.3",
     "mocha": "^2.5.3",
-    "npm-run-all": "^2.1.1",
+    "npm-run-all": "^2.1.2",
     "run-sequence": "^1.2.1",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
