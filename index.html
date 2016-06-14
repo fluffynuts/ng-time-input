@@ -17,7 +17,7 @@
         .directive('timeInputDemo', function() {
           return {
             restrict: 'E',
-            template: '<time-input data-ng-model="value"></time-input><button data-ng-click="toggleTimer()">{{ buttonText }}</button><input data-ng-model="value"></input>',
+            template: '<div><time-input data-ng-model="value"></time-input><input data-ng-model="value"></input></div><div><button data-ng-click="toggleTimer()"> {{ buttonText }}</button><button data-ng-click="setUndefined();">Set value to undefined</button></div>',
             link: function($scope, $element, $attr) {
               const offText = "Start timer";
               const onText = "Stop timer";
@@ -38,6 +38,9 @@
                   }, 1000);
                 }
               };
+              $scope.setUndefined = function() {
+                $scope.value = undefined;
+              }
             }
           }
         });

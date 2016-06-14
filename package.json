@@ -1,6 +1,6 @@
 {
   "name": "ng-time-input",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "angular directive for capturing time input from a user",
   "main": "index.js",
   "repository": {
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/fluffynuts/ng-time-input#readme",
   "dependencies": {
     "angular": "^1.5.6",
-    "ng-scroll": "^1.0.3"
+    "ng-scroll": "^1.0.4"
   },
   "devDependencies": {
     "angular-animate": "^1.5.6",
@@ -31,12 +31,15 @@
     "chai": "^3.5.0",
     "cp-cli": "^1.0.2",
     "gulp": "^3.9.1",
+    "gulp-browserify": "^0.5.1",
     "gulp-npm-run": "0.0.3",
     "mocha": "^2.5.3",
     "npm-run-all": "^2.1.2",
     "run-sequence": "^1.2.1",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
-    "stringify": "^5.1.0"
+    "stringify": "^5.1.0",
+    "vinyl-source-stream": "^1.1.0",
+    "vinyl-transform": "^1.0.0"
   }
 }

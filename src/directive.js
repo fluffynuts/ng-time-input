@@ -49,20 +49,6 @@ function handleSet(min, max, newValue, oldValue, setter, focusOther) {
   }
 }
 
-const steppers = {
-  incrementHours: function(v) {
-    return v.setHours(v.getHours() + 1);
-  },
-  decrementHours: function(v) {
-    return v.setHours(v.getHours() - 1);
-  },
-  incrementMinutes: function(v) {
-    return v.setMinutes(v.getMinutes() + 1);
-  },
-  decrementMinutes: function(v) {
-    return v.setMinutes(v.getMinutes() - 1);
-  }
-};
 
 function makeStepperFunction(get, set, inc, after) {
   return function() {
@@ -100,13 +86,23 @@ function timeInputDirective() {
       $scope.$watch(modelBind, function(newValue, oldValue) {
         setInputsFor(newValue);
       });
-      function setHours(val) {
-        set(get().setHours(parseInt(val)));
+      function trySetWith(modifierFunc) {
+        const currentVal = get();
+        if (!currentVal) {
+          return;
+        }
+        set(modifierFunc(currentVal));
         setInputsFor($scope[modelBind]);
       }
+      function setHours(val) {
+        trySetWith(function(currentVal) {
+          return currentVal.setHours(parseInt(val))
+        });
+      }
       function setMinutes(val) {
-        set(get().setMinutes(parseInt(val)));
-        setInputsFor($scope[modelBind]);
+        trySetWith(function(currentVal) {
+          return currentVal.setMinutes(parseInt(val));
+        });
       }
       var suppressSelect = false;
       $scope.$watch('hours', function(newValue, oldValue) {
@@ -120,10 +116,18 @@ function timeInputDirective() {
         suppressSelect = true;
       }
 
-      $scope.incrementHours = makeStepperFunction(get, set, steppers.incrementHours, suppress); 
-      $scope.decrementHours = makeStepperFunction(get, set, steppers.decrementHours, suppress);
-      $scope.incrementMinutes = makeStepperFunction(get, set, steppers.incrementMinutes);
-      $scope.decrementMinutes = makeStepperFunction(get, set, steppers.decrementMinutes);
+      $scope.stepHours = function(howMuch) {
+        var current = get();
+        if (current) {
+          setHours(current.getHours() + howMuch);
+        }
+      };
+      $scope.stepMinutes = function(howMuch) {
+        var current = get();
+        if (current) {
+          setMinutes(current.getMinutes() + howMuch);
+        }
+      }
     }
   }
 }

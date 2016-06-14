@@ -1,7 +1,10 @@
 const 
   gulp = require('gulp-npm-run')(require('gulp')),
   browserSync = require('browser-sync'),
-  runSequence = require('run-sequence')
+  runSequence = require('run-sequence'),
+  browserify = require('browserify'),
+  source = require('vinyl-source-stream'),
+  stringify = require('stringify');
 
 gulp.task('serve', () => {
   browserSync.init({
@@ -13,15 +16,21 @@ gulp.task('serve', () => {
   console.log('watching...');
   watcher.on('change', ev => {
     console.log(ev.type + ': ' + ev.path)
-    runSequence('build', 'force-reload')
+    runSequence('rebuild', function() {
+      browserSync.reload()
+    })
   })
 })
 
-gulp.task('force-reload', done => {
-  setTimeout(() => {
-    // lazy hack: gulp-npm-run doesn't appear to be waiting
-    //  for build to complete
-    browserSync.reload();
-    done();
-  }, 1000);
-})
+gulp.task('rebuild', () => {
+  return browserify({
+            entries: './src/register.js'
+          })
+          .transform(stringify, {
+            appliesTo: { includeExtensions: ['.html'] }
+          })
+          .bundle()
+          .pipe(source('ng-time-input.js'))
+          .pipe(gulp.dest('.'));
+});
+
