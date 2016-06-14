@@ -65,7 +65,7 @@ function timeInputDirective() {
     template: require('./template.html'),
     restrict: 'E',
     link: function($scope, $element, $attrs) {
-      let modelBind = $attrs['ngModel']
+      var modelBind = $attrs['ngModel'];
       if (!modelBind) {
         console.log('time-input has no ngModel set; falling back on "value"');
         modelBind = 'value';
@@ -96,7 +96,7 @@ function timeInputDirective() {
       }
       function setHours(val) {
         trySetWith(function(currentVal) {
-          return currentVal.setHours(parseInt(val))
+          return currentVal.setHours(parseInt(val));
         });
       }
       function setMinutes(val) {

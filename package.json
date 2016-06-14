@@ -1,6 +1,6 @@
 {
   "name": "ng-time-input",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "angular directive for capturing time input from a user",
   "main": "index.js",
   "repository": {
