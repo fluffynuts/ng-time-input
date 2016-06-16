@@ -1,9 +1,11 @@
+var _ = require('lodash')
+
 function zeroPad(val) {
-  val = '' + val;
-  while (val.length < 2) {
-    val = '0' + val;
-  }
-  return val;
+  return _.padStart('' + val, 2, '0');
+}
+
+function asDate(val) {
+  return val instanceof Date ? val : new Date(val);
 }
 
 function toArray(src) {
@@ -11,15 +13,15 @@ function toArray(src) {
 }
 
 function getInput($element, withClass) {
-  const allInputs = toArray($element.find('input'));
+  var allInputs = toArray($element.find('input'));
   return allInputs.filter(function(el) {
-    const allClasses = toArray(el.classList);
+    var allClasses = toArray(el.classList);
     return allClasses.indexOf(withClass) > -1;
   })[0];
 }
 
 function isValid(value, min, max) {
-  const asInt = parseInt(value + '');
+  var asInt = parseInt(value + '');
   return !isNaN(asInt) && asInt >= min && asInt <= max;
 }
 
@@ -31,14 +33,14 @@ function handleSet(min, max, newValue, oldValue, setter, focusOther) {
     setter(isValid(oldValue) ? oldValue : min);
     return;
   }
-  const focusNext = function() {
+  var focusNext = function() {
     if (focusOther) {
       focusOther.focus();
     }
   }
-  const asInt = parseInt(newValue);
+  var asInt = parseInt(newValue);
   if (newValue.length === 1) {
-    const upper = max / 10;
+    var upper = max / 10;
     if (asInt >= upper) {
       setter('0' + newValue);
       focusNext();
@@ -49,15 +51,56 @@ function handleSet(min, max, newValue, oldValue, setter, focusOther) {
   }
 }
 
-
 function makeStepperFunction(get, set, inc, after) {
   return function() {
-    const current = get();
+    var current = get();
     set(inc(current));
     if (after) {
       after();
     }
   }
+}
+
+function addKeyUpHandler(el, keyCode, handler) {
+  el.addEventListener('keyup', function(ev) {
+    if (ev.keyCode === keyCode) {
+      if (handler(ev)) {
+        ev.preventDefault();
+      }
+    }
+  })
+}
+
+function scopeEval($scope, toEval) {
+  $scope.$eval(toEval);
+  return true;
+}
+
+const KEY_ARROW_UP = 38;
+const KEY_ARROW_DOWN = 40;
+function bindHoursArrowKeys($scope, $element) {
+  var input = getInput($element, 'hours')
+  addKeyUpHandler(input, KEY_ARROW_UP, function() {
+    return scopeEval($scope, "stepHours(1)");
+  });
+  addKeyUpHandler(input, KEY_ARROW_DOWN, function() {
+    return scopeEval($scope, "stepHours(-1)");
+  });
+}
+
+function bindMinutesArrowKeys($scope, $element) {
+  var input = getInput($element, 'minutes')
+  addKeyUpHandler(input, KEY_ARROW_UP, function() {
+    return scopeEval($scope, "stepMinutes(1)");
+  })
+  addKeyUpHandler(input, KEY_ARROW_DOWN, function() {
+    return scopeEval($scope, "stepMinutes(-1)");
+  })
+}
+
+function bindArrowKeys($scope, $element) {
+  bindHoursArrowKeys($scope, $element);
+  bindMinutesArrowKeys($scope, $element);
 }
 
 function timeInputDirective() {
@@ -71,11 +114,14 @@ function timeInputDirective() {
         modelBind = 'value';
         $scope.value = new Date();
       }
+      bindArrowKeys($scope, $element);
       function get() {
-        return $scope[modelBind];
+        var val = _.get($scope, modelBind);
+        return asDate(val);
       }
       function set(val) {
-        $scope[modelBind] = val instanceof Date ? val : new Date(val);
+        var toSet = asDate(val);
+        _.set($scope, modelBind, val);
       }
       function setInputsFor(dateVal) {
         if (dateVal instanceof Date) {
@@ -101,6 +147,8 @@ function timeInputDirective() {
       }
       function setMinutes(val) {
         trySetWith(function(currentVal) {
+          console.log('setMinutes: current value: ' + currentVal);
+          console.log('setMinutes: will set minutes to ' + parseInt(val));
           return currentVal.setMinutes(parseInt(val));
         });
       }

@@ -20,6 +20,7 @@
   "homepage": "https://github.com/fluffynuts/ng-time-input#readme",
   "dependencies": {
     "angular": "^1.5.6",
+    "lodash": "^4.13.1",
     "ng-scroll": "^1.0.4"
   },
   "devDependencies": {
